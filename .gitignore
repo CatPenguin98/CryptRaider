@@ -72,3 +72,15 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Third-party packs (do not distribute)
+Content/_External/**
+
+# (사용한다면) Quixel/Megascans/MetaHumans도 제외
+Content/Megascans/**
+Content/Quixel/**
+Content/MetaHumans/**
+
+#  아래 두 폴더는 절대 제외하지 말 것!
+#!Content/__ExternalActors__/**
+#!Content/__ExternalObjects__/**
