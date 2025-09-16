@@ -25,11 +25,27 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
+	bool GetGrabbableInReach(FHitResult& _HitResult) const;
+
+private:
+	UFUNCTION(BlueprintCallable)
+	void Grab();
+
+	UFUNCTION(BlueprintCallable)
+	void Release();
+
+private:
 	UPROPERTY(EditAnywhere)
 	float MaxGrabDistance = 400.f;
 
 	UPROPERTY(EditAnywhere)
+	float HoldDistance = 200.f;
+
+	UPROPERTY(EditAnywhere)
 	float GrabRadius = 100.f;
+
+private:
+	class UPhysicsHandleComponent* m_PhscsHndlComp;
 		
 };
 
