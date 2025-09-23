@@ -47,7 +47,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	//DrawDebugLine(GetWorld(), Start, End, FColor::Red);
 	#pragma endregion
 
-	if (m_PhscsHndlComp->GetGrabbedComponent() != nullptr)
+	if (m_PhscsHndlComp && m_PhscsHndlComp->GetGrabbedComponent())
 	{
 		FVector NewTargetLocation = Start + GetForwardVector() * HoldDistance;
 		m_PhscsHndlComp->SetTargetLocationAndRotation(
@@ -92,8 +92,14 @@ void UGrabber::Grab()
 	#pragma endregion
 
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+
+		HitComponent->SetSimulatePhysics(true);
 		HitComponent->WakeAllRigidBodies();
 
+		HitResult.GetActor()->Tags.Add("Grabbed");
+
+		// 물체잡기
+		//HitResult.GetActor()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		m_PhscsHndlComp->GrabComponentAtLocationWithRotation(
 			HitComponent,
 			NAME_None,
@@ -113,8 +119,11 @@ void UGrabber::Release()
 {
 	UE_LOG(LogGrabber, Warning, TEXT("Released"));
 
-	if (m_PhscsHndlComp->GetGrabbedComponent() != nullptr)
+	if (m_PhscsHndlComp && m_PhscsHndlComp->GetGrabbedComponent())
 	{
+		AActor* GrabbedActor = m_PhscsHndlComp->GetGrabbedComponent()->GetOwner();
+		GrabbedActor->Tags.Remove("Grabbed");
+
 		m_PhscsHndlComp->ReleaseComponent();
 	}
 }

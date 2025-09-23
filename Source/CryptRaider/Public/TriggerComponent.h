@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
+
+class UMover;
+
 #include "TriggerComponent.generated.h"
 
 /**
@@ -25,6 +28,23 @@ protected:
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+private:
+	AActor* GetAcceptableActor() const;
+
+private:
+	UFUNCTION(BlueprintCallable)
+	void SetMover(UMover* _NewMover);
+
+private:
+	UPROPERTY(EditAnywhere)
+	FName AcceptableActorTag;
+
+	UPROPERTY(EditInstanceOnly)
+	FComponentReference TargetMover;   // 에디터에서 컴포넌트 선택 UI 제공
+
+private:
+	UMover* m_Mover;
 	
 };
 

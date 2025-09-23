@@ -24,6 +24,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+public:
+	void SetShouldMove(const bool _ShouldMove);
+
 private:
 	UPROPERTY(EditAnywhere)
 	FVector MoveOffSet;
@@ -35,8 +38,11 @@ private:
 	bool ShouldMove = false;
 
 private:
+	bool bIsChangedState;
 	float MoveSpeed;
 	FVector MovedTargetPosition;
+	FVector OriginPosition;
+	FVector TargetPosition;
 };
 
 DECLARE_LOG_CATEGORY_EXTERN(LogMover, Log, All);

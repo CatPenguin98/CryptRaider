@@ -22,6 +22,8 @@ void UMover::BeginPlay()
 {
 	Super::BeginPlay();
 
+	OriginPosition = GetOwner()->GetActorLocation();
+
 	//목표위치 계산
 	MovedTargetPosition = GetOwner()->GetActorLocation() + MoveOffSet;
 
@@ -40,15 +42,41 @@ void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 
 	if(ShouldMove)
 	{
-		//현재 위치와 목표위치간의 보간
-		FVector InterpPosition = FMath::VInterpConstantTo(
-			GetOwner()->GetActorLocation(),
-			MovedTargetPosition,
-			DeltaTime,
-			MoveSpeed
-		);
-
-		GetOwner()->SetActorLocation(InterpPosition);
+		TargetPosition = MovedTargetPosition;
 	}
+	else
+	{
+		TargetPosition = OriginPosition;
+	}
+
+	if(bIsChangedState)
+	{
+		MoveSpeed = FVector::Dist(
+			GetOwner()->GetActorLocation(),
+			TargetPosition) / MoveTime;
+	}
+
+	//현재 위치와 목표위치간의 보간
+	FVector InterpPosition = FMath::VInterpConstantTo(
+		GetOwner()->GetActorLocation(),
+		TargetPosition,
+		DeltaTime,
+		MoveSpeed
+	);
+
+	GetOwner()->SetActorLocation(InterpPosition);
+}
+
+void UMover::SetShouldMove(const bool _ShouldMove)
+{
+	if (ShouldMove != _ShouldMove)
+	{
+		bIsChangedState = true;
+	}
+	else
+	{
+		bIsChangedState = false;
+	}
+	ShouldMove = _ShouldMove;
 }
 
